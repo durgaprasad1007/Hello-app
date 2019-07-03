@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<project name="springapp" basedir="." default="usage">
+    
+
+    <property name="src.dir" value="src"/>
+    <property name="web.dir" value="web"/>
+    <property name="build.dir" value="${web.dir}/WEB-INF/classes"/>
+    <property name="name" value="springapp"/>
+
+    <path id="master-classpath">
+        <fileset dir="../lib">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="../lib"/>
+    </path>
+
+    <target name="usage">
+        <echo message=""/>
+        <echo message="${name} build file"/>
+        <echo message="-----------------------------------"/>
+        <echo message=""/>
+        <echo message="Available targets are:"/>
+        <echo message=""/>
+        <echo message="build     --> Build the application"/>
+        <echo message="package    --> Packages the WAR file"/>
+        <echo message=""/>
+    </target>
+
+    <target name="build" description="Compile main source tree java files">
+	<mkdir dir="../source/${build.dir}"/>
+        <javac destdir="../source/${build.dir}" source="1.8" target="1.8" debug="true"
+               deprecation="false" optimize="false" failonerror="true" includeantruntime="false">
+            <src path="../source/${src.dir}"/>
+            <classpath refid="master-classpath"/>
+        </javac>
+    </target>
+
+    <target name="package" depends="build" description="Package a war file">
+        <war destfile="../artifacts/gallop.war"
+             webxml="../source/${web.dir}/WEB-INF/web.xml">
+            <fileset dir="../source/${web.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </war>
+    </target>
+
+</project>
